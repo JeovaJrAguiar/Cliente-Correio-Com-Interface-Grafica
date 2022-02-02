@@ -15,20 +15,22 @@ public class ServidorSocket {
         try {
             //criamos o servico de escuta
             
-            ServerSocket servidor = new ServerSocket(3330);
-            System.out.println("Servidor inicializado.");
+            ServerSocket servidor = new ServerSocket(3340);
+            System.out.print("Servidor inicializado.");
             
             //criamos o canal de comunicacao para esse servico
-            Socket cliente = servidor.accept();
-            System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
-            
-            Scanner entrada = new Scanner(cliente.getInputStream());
-            while(entrada.hasNextLine()){
-                System.out.println(entrada.nextLine());
+            while(true){
+                System.out.println(" Aguardando conexao.");
+                Socket cliente = servidor.accept();
+                System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
+
+                Scanner entrada = new Scanner(cliente.getInputStream());
+                while(entrada.hasNextLine()){
+                    System.out.println(entrada.nextLine());
+                }
+                entrada.close();
+                servidor.close();
             }
-            
-            entrada.close();
-            servidor.close();
         } catch (IOException ex) {
             System.out.println("Erroao criar o servidor: " + ex.getMessage());
             
