@@ -1,86 +1,65 @@
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
  * @author JEOVÁ JR
  */
 public class Principal extends javax.swing.JFrame {    
+    private static Socket cliente;
+    
+    public Principal(){
+        initComponents();
+        iniciaCliente();
+    }
+    
+    private static void enviaMensagem(String mensagem){
+        PrintStream saida;
+        try {
+            saida = new PrintStream(cliente.getOutputStream());
+            saida.println(mensagem);
+        } catch (IOException ex) {
+            System.out.println("Erro ao enviar mensagem.");
+            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mensagem = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        resultado = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().add(mensagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 90, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jButton1.setText("Enviar Mensagem");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, -1));
+        getContentPane().add(resultado, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 100, 20));
 
-        pack();
+        setSize(new java.awt.Dimension(416, 339));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        enviaMensagem(mensagem.getText());
+        resultado.setText("Mensagem enviadacom sucesso.");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public static void main(String args[]) {
-        try {
-            //cria conexao entre cliente e o servidor
-            System.out.println("Estabelecendo conexao...");
-            Socket socket = new Socket("localhost", 5555); 
-            System.out.println("Conexao estabelecida.");
-
-            //para poder manipular o socket, preciso criar streams de entrada e saida
-            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-
-                /* Tratar a conversação entre cliente e servidor (tratar protocolo).
-                    HELLO
-                    nome: string
-                    sobrenome : String
-
-                    HELLOREPLY
-                    OK, ERRO, PARAMERROR
-                    mensagem: String
-                */
-
-            Mensagem m = new Mensagem("HELLO");
-            m.setStatus(Status.SOLICITACAO);
-            m.setParam("nome", "Eduardo");
-            m.setParam("sobrenome", "Dipp");
-
-            output.writeObject(m);
-            output.flush(); //libera buffer para envio
-
-            System.out.println("Mensagem " + m + " enviada");
-
-            m = (Mensagem) input.readObject();
-            System.out.println("Resposta: " + m);
-
-            if(m.getStatus() == Status.OK)
-            {
-                String reposta = (String) m.getParam("mensagem");
-            }
-
-            input.close();
-            output.close();
-            socket.close();
-        } catch (IOException ex) {
-            System.out.println("Erro no cliente: " + ex);
-            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex){
-            System.out.println("Erro no cliente: " + ex.getMessage());
-            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -111,7 +90,19 @@ public class Principal extends javax.swing.JFrame {
         });
     }
     
+    private static void iniciaCliente(){
+        try {
+            cliente = new Socket("localhost", 3334);
+            System.out.println("cliente conectado");
+        } catch (IOException ex) {
+            System.out.println("Erro na concexao com o servidor");
+            //Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField mensagem;
+    private javax.swing.JLabel resultado;
     // End of variables declaration//GEN-END:variables
 }
