@@ -36,10 +36,11 @@ public class Principal extends javax.swing.JFrame {
         mensagem = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         resultado = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(mensagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 90, -1));
+        getContentPane().add(mensagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 130, 60));
 
         jButton1.setText("Enviar Mensagem");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -47,8 +48,11 @@ public class Principal extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, -1));
-        getContentPane().add(resultado, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 100, 20));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, -1, -1));
+        getContentPane().add(resultado, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 130, 20));
+
+        jLabel1.setText("---- Client ----");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, -1, -1));
 
         setSize(new java.awt.Dimension(416, 339));
         setLocationRelativeTo(null);
@@ -56,7 +60,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         enviaMensagem(mensagem.getText());
-        resultado.setText("Mensagem enviadacom sucesso.");
+        resultado.setText("Msg enviada.");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
@@ -92,7 +96,7 @@ public class Principal extends javax.swing.JFrame {
     
     private static void iniciaCliente(){
         try {
-            cliente = new Socket("localhost", 3334);
+            cliente = new Socket("localhost", 3330);
             System.out.println("cliente conectado");
         } catch (IOException ex) {
             System.out.println("Erro na concexao com o servidor");
@@ -102,6 +106,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField mensagem;
     private javax.swing.JLabel resultado;
     // End of variables declaration//GEN-END:variables

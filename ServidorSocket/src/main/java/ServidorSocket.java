@@ -14,7 +14,8 @@ public class ServidorSocket {
     public static void main(String[] args){
         try {
             //criamos o servico de escuta
-            ServerSocket servidor = new ServerSocket(3334);
+            
+            ServerSocket servidor = new ServerSocket(3330);
             System.out.println("Servidor inicializado.");
             
             //criamos o canal de comunicacao para esse servico
@@ -30,6 +31,7 @@ public class ServidorSocket {
             servidor.close();
         } catch (IOException ex) {
             System.out.println("Erroao criar o servidor: " + ex.getMessage());
+            
         }
     }
 }
