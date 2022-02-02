@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 public class ServidorSocket extends javax.swing.JFrame {
     private static int portaServidor = 3353;
     static ServerSocket servidor = null;
+    static Socket cliente = null;
     /**
      * Creates new form ServidorSocket
      */
@@ -34,19 +35,13 @@ public class ServidorSocket extends javax.swing.JFrame {
         }
     }
     
-    private static Socket startServer(){
-        try{
-            Socket cliente = servidor.accept();
-            System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
-
-            Scanner entrada = new Scanner(cliente.getInputStream());
-            while(entrada.hasNextLine()){
-                System.out.println(entrada.nextLine());
-            }
-            entrada.close();
-            closeSocket(cliente);
-        }catch(IOException ex){
-            System.out.println("Erro ao  fechar o servidor(ServerSocket).");
+    private static void startServer(){
+        try {
+            servidor = new ServerSocket(portaServidor);
+            System.out.print("Servidor inicializado.");
+        } catch (IOException ex) {
+            System.out.print("Erro ao iniciar servidor: " + ex.getMessage());
+            //Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -149,15 +144,15 @@ public class ServidorSocket extends javax.swing.JFrame {
 
     private void startServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startServerButtonActionPerformed
         String portaservidor = (String) toString(portaServidor);
-        portaServer.setText(portaservidor);//toString(portaServidor)
-        ipServer.setText("ipServer");
-        ipClient.setText("ipClient"); 
+        String ipserver = (String) toString(servidor.getInetAddress().getHostAddress());
+        String ipclient = (String) toString(cliente.getInetAddess().getHostAddess());
+        
+        portaServer.setText(portaservidor);
+        ipServer.setText(ipserver);
+        ipClient.setText(ipclient); 
         connection.setText("connection");
     }//GEN-LAST:event_startServerButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -182,28 +177,30 @@ public class ServidorSocket extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ServidorSocket().setVisible(true);
             }
         });
         
-        try {
-            //criamos o servico de escuta
-            servidor = new ServerSocket(portaServidor);
-            System.out.print("Servidor inicializado.");
-            
-            //criamos o canal de comunicacao para esse servico
-            while(true){
-                //System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
-                System.out.println(" Aguardando conexao.");
+        //iniciamos o servico de escuta
+        startServer();
+        //criamos o canal de comunicacao para esse servico
+        while(true){
+            //System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
+            System.out.print("--");
+            System.out.println("Aguardando conexao.");
+            try{
+                cliente = servidor.accept();
+                System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
                 
-                
+                Scanner entrada = new Scanner(cliente.getInputStream());
+                while(entrada.hasNextLine()){
+                    System.out.println(entrada.nextLine());
+                }
+            }catch(IOException ex){
+                System.out.println("Erro ao  fechar o servidor(ServerSocket).");
             }
-        } catch (IOException ex) {
-            System.out.println("Erroao criar o servidor: " + ex.getMessage());
-            
         }
     }
 
