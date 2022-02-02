@@ -16,7 +16,7 @@ import javax.swing.JTextField;
  *
  * @author JEOVÁ JR
  */
-public class ServidorSocket extends javax.swing.JFrame {
+public class ServidorSocket extends javax.swing.JFrame{
     static ServerSocket servidor = null;
     static Socket cliente = null;
     private static Boolean fechaConexao = true;
@@ -149,13 +149,12 @@ public class ServidorSocket extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeServerButtonActionPerformed
-
+        
         closeServer();
     }//GEN-LAST:event_closeServerButtonActionPerformed
 
     private void startServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startServerButtonActionPerformed
         startServer();
-        
         portaServer.setText(portaServidor);
         ipServer.setText(ipserver);
         ipClient.setText(ipclient); 
