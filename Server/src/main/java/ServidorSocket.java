@@ -17,17 +17,23 @@ import javax.swing.JTextField;
  * @author JEOVÁ JR
  */
 public class ServidorSocket extends javax.swing.JFrame {
-    private static int portaServidor = 3353;
     static ServerSocket servidor = null;
     static Socket cliente = null;
-    /**
-     * Creates new form ServidorSocket
-     */
+    private static Boolean fechaConexao = true;
+    private static String ipclient = "    cliente ainda nao conectado";
+    private static String ipserver = "    cliente ainda nao conectado";
+    private static String portaServidor = "3353";
+
+    private static int toInt(String portaServidor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public ServidorSocket() {
         initComponents();
     }
     private static void closeSocket(Socket socket){
         try {
+            fechaConexao = false;
             socket.close();
         } catch (IOException ex) {
             System.out.println("Erro ao  fechar o cliente(Socket).");
@@ -35,9 +41,18 @@ public class ServidorSocket extends javax.swing.JFrame {
         }
     }
     
+    private static void getAdderssOfClient(Socket client){
+        ipclient = client.getInetAddress().getHostAddress();
+    }
+    
+    private static void getAdderssOfServer(ServerSocket server){
+        ipserver = server.getInetAddress().getHostAddress();
+    }
+    
     private static void startServer(){
         try {
-            servidor = new ServerSocket(portaServidor);
+            int portaservidor = toInt(portaServidor);
+            servidor = new ServerSocket(portaservidor);
             System.out.print("Servidor inicializado.");
         } catch (IOException ex) {
             System.out.print("Erro ao iniciar servidor: " + ex.getMessage());
@@ -55,7 +70,7 @@ public class ServidorSocket extends javax.swing.JFrame {
     }
     
     public int getPortaServer(){
-        return portaServidor;
+        return toInt(portaServidor);
     }
 
     /**
@@ -135,19 +150,13 @@ public class ServidorSocket extends javax.swing.JFrame {
 
     private void closeServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeServerButtonActionPerformed
 
-        portaServer.setText(" - ");
-        ipServer.setText(" - ");
-        ipClient.setText(" - "); 
-        connection.setText(" - ");
         closeServer();
     }//GEN-LAST:event_closeServerButtonActionPerformed
 
     private void startServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startServerButtonActionPerformed
-        String portaservidor = (String) toString(portaServidor);
-        String ipserver = (String) toString(servidor.getInetAddress().getHostAddress());
-        String ipclient = (String) toString(cliente.getInetAddess().getHostAddess());
+        startServer();
         
-        portaServer.setText(portaservidor);
+        portaServer.setText(portaServidor);
         ipServer.setText(ipserver);
         ipClient.setText(ipclient); 
         connection.setText("connection");
@@ -183,21 +192,29 @@ public class ServidorSocket extends javax.swing.JFrame {
             }
         });
         
-        //iniciamos o servico de escuta
-        startServer();
+        System.out.println("Tela Criada.");
         //criamos o canal de comunicacao para esse servico
-        while(true){
             //System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
-            System.out.print("--");
+            System.out.println("--");
             System.out.println("Aguardando conexao.");
             try{
-                cliente = servidor.accept();
-                System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
-                
-                Scanner entrada = new Scanner(cliente.getInputStream());
-                while(entrada.hasNextLine()){
-                    System.out.println(entrada.nextLine());
-                }
+                while(fechaConexao){
+                        System.out.println("criadno cliente.");
+                        cliente = servidor.accept();
+                        System.out.println("cliente instaciado.");
+
+                        getAdderssOfClient(cliente);
+                        getAdderssOfServer(servidor);
+
+                        Scanner entrada = new Scanner(cliente.getInputStream());
+                        if(entrada.toString() != "R3D3$"){
+                            while(entrada.hasNextLine()){
+                                System.out.println(entrada.nextLine());
+                            }
+                        }else{
+                            closeSocket(cliente);
+                        }
+                }  
             }catch(IOException ex){
                 System.out.println("Erro ao  fechar o servidor(ServerSocket).");
             }
