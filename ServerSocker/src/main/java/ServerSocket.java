@@ -1,11 +1,11 @@
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextField;
+import java.net.ServerSocket;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -16,19 +16,23 @@ import javax.swing.JTextField;
  *
  * @author JEOVÁ JR
  */
-public class ServidorSocket extends javax.swing.JFrame{
+public class ServerSocket extends javax.swing.JFrame {
+    private static ServerSocket servidor = null;
+    static Socket cliente = null;
+    private static Boolean fechaConexao = true;
+    private static String ipclient = "    cliente ainda nao conectado";
+    private static String ipserver = "    cliente ainda nao conectado";
+    private static String portaServidor = "3356";
+    
+    public ServerSocket() {
+        initComponents();
+    }
+    
+    
+    
     
 
     
-
-    
-    
-    
-    
-    
-    
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,67 +45,61 @@ public class ServidorSocket extends javax.swing.JFrame{
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        closeServerButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        ipClient = new javax.swing.JLabel();
-        connection = new javax.swing.JLabel();
-        startServerButton = new javax.swing.JButton();
         ipServer = new javax.swing.JLabel();
         portaServer = new javax.swing.JLabel();
+        ipClient = new javax.swing.JLabel();
+        connection = new javax.swing.JLabel();
+        closeServerButton = new javax.swing.JButton();
+        startServerButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("SERVER");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, -1, -1));
 
-        jLabel2.setText("Cliente Correio v1.0.4");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+        jLabel2.setText("Cliente Correio v2.0.7");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        jLabel3.setText("Concexão estabelecida: ");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
+        jLabel3.setText("IP do servidor: ");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, -1));
 
-        closeServerButton.setText("Close Server");
+        jLabel4.setText("Porta: ");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
+
+        jLabel5.setText("IP do cliente conectado:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, -1, -1));
+
+        jLabel6.setText("Concexão estabelecida: ");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, -1, -1));
+        getContentPane().add(ipServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 210, 20));
+        getContentPane().add(portaServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 260, 20));
+        getContentPane().add(ipClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 170, 20));
+        getContentPane().add(connection, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 170, 20));
+
+        closeServerButton.setText("Fechar Servidor");
         closeServerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeServerButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(closeServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
+        getContentPane().add(closeServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
 
-        jLabel4.setText("IP do servidor: ");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
-
-        jLabel5.setText("IP do cliente conectado:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
-
-        jLabel6.setText("Porta: ");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
-
-        ipClient.setText(" ");
-        getContentPane().add(ipClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 190, 200, -1));
-
-        connection.setText(" ");
-        getContentPane().add(connection, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 200, -1));
-
-        startServerButton.setText("Start Server");
+        startServerButton.setText("Ligar Servidor");
         startServerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startServerButtonActionPerformed(evt);
             }
         });
         getContentPane().add(startServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 380, -1, -1));
-        getContentPane().add(ipServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 250, 20));
-        getContentPane().add(portaServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 290, 20));
 
-        setSize(new java.awt.Dimension(416, 468));
-        setLocationRelativeTo(null);
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeServerButtonActionPerformed
-        
         closeServer();
     }//GEN-LAST:event_closeServerButtonActionPerformed
 
@@ -113,6 +111,9 @@ public class ServidorSocket extends javax.swing.JFrame{
         connection.setText("connection");
     }//GEN-LAST:event_startServerButtonActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -127,22 +128,51 @@ public class ServidorSocket extends javax.swing.JFrame{
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ServidorSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ServidorSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ServidorSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ServidorSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ServidorSocket().setVisible(true);
             }
         });
+        
+        System.out.println("Tela Criada.");
+        //criamos o canal de comunicacao para esse servico
+            //System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
+        System.out.println("--");
+        System.out.println("Aguardando conexao.");
+        try{
+            while(fechaConexao){
+                    servidor = new ServerSocket(3356);
+                    cliente = servidor.accept();
+                    System.out.println("cliente instaciado.");
+
+                    getAdderssOfClient(cliente);
+                    getAdderssOfServer(servidor);
+
+                    Scanner entrada = new Scanner(cliente.getInputStream());
+                    if(entrada.toString() != "R3D3$"){
+                        while(entrada.hasNextLine()){
+                            System.out.println(entrada.nextLine());
+                        }
+                    }else{
+                        closeSocket(cliente);
+                    }
+            }  
+        }catch(IOException ex){
+            System.out.println("Erro ao  fechar o servidor(ServerSocket).");
+        }
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeServerButton;
@@ -159,7 +189,7 @@ public class ServidorSocket extends javax.swing.JFrame{
     private javax.swing.JButton startServerButton;
     // End of variables declaration//GEN-END:variables
 
-    private String toString(int portaServidor) {
+    private Socket accept() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
