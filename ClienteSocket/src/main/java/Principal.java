@@ -146,7 +146,7 @@ public class Principal extends javax.swing.JFrame {
     
     private static void iniciaCliente(){
         try {
-            cliente = new Socket("localhost", 3341);
+            cliente = new Socket("localhost", 3347);
             System.out.println("cliente conectado");
         } catch (IOException ex) {
             System.out.println("Erro na concexao com o servidor");

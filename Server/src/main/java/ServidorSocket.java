@@ -17,7 +17,8 @@ import javax.swing.JTextField;
  * @author JEOVÁ JR
  */
 public class ServidorSocket extends javax.swing.JFrame {
-    private static int portaServidor = 3346;
+    private static int portaServidor = 3353;
+    static ServerSocket servidor = null;
     /**
      * Creates new form ServidorSocket
      */
@@ -33,9 +34,25 @@ public class ServidorSocket extends javax.swing.JFrame {
         }
     }
     
-    private static void closeServer(ServerSocket server){
+    private static Socket startServer(){
+        try{
+            Socket cliente = servidor.accept();
+            System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
+
+            Scanner entrada = new Scanner(cliente.getInputStream());
+            while(entrada.hasNextLine()){
+                System.out.println(entrada.nextLine());
+            }
+            entrada.close();
+            closeSocket(cliente);
+        }catch(IOException ex){
+            System.out.println("Erro ao  fechar o servidor(ServerSocket).");
+        }
+    }
+    
+    private static void closeServer(){
         try {
-            server.close();
+            servidor.close();
         } catch (IOException ex) {
             System.out.println("Erro ao  fechar o servidor(ServerSocket).");
             //Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,7 +75,7 @@ public class ServidorSocket extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        closeServerButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -66,6 +83,7 @@ public class ServidorSocket extends javax.swing.JFrame {
         portaServer = new javax.swing.JLabel();
         ipClient = new javax.swing.JLabel();
         connection = new javax.swing.JLabel();
+        startServerButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -79,13 +97,13 @@ public class ServidorSocket extends javax.swing.JFrame {
         jLabel3.setText("Concexão estabelecida: ");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
-        jButton1.setText("Close Server");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        closeServerButton.setText("Close Server");
+        closeServerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                closeServerButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, -1, -1));
+        getContentPane().add(closeServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
 
         jLabel4.setText("IP do servidor: ");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
@@ -108,14 +126,34 @@ public class ServidorSocket extends javax.swing.JFrame {
         connection.setText(" ");
         getContentPane().add(connection, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 200, -1));
 
+        startServerButton.setText("Start Server");
+        startServerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startServerButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(startServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 380, -1, -1));
+
         setSize(new java.awt.Dimension(416, 468));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void closeServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeServerButtonActionPerformed
+
+        portaServer.setText(" - ");
+        ipServer.setText(" - ");
+        ipClient.setText(" - "); 
+        connection.setText(" - ");
+        closeServer();
+    }//GEN-LAST:event_closeServerButtonActionPerformed
+
+    private void startServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startServerButtonActionPerformed
+        String portaservidor = (String) toString(portaServidor);
+        portaServer.setText(portaservidor);//toString(portaServidor)
+        ipServer.setText("ipServer");
+        ipClient.setText("ipClient"); 
+        connection.setText("connection");
+    }//GEN-LAST:event_startServerButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,25 +191,15 @@ public class ServidorSocket extends javax.swing.JFrame {
         
         try {
             //criamos o servico de escuta
-            ServerSocket servidor = new ServerSocket(portaServidor);
-            portaServer.setText("3343");
+            servidor = new ServerSocket(portaServidor);
             System.out.print("Servidor inicializado.");
             
             //criamos o canal de comunicacao para esse servico
             while(true){
                 //System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
                 System.out.println(" Aguardando conexao.");
-                Socket cliente = servidor.accept();
-                System.out.println("Cliente do ip: " + cliente.getInetAddress().getHostAddress());
-
-                Scanner entrada = new Scanner(cliente.getInputStream());
-                while(entrada.hasNextLine()){
-                    System.out.println(entrada.nextLine());
-                }
                 
-                entrada.close();
-                closeSocket(cliente);
-                closeServer(servidor);
+                
             }
         } catch (IOException ex) {
             System.out.println("Erroao criar o servidor: " + ex.getMessage());
@@ -180,10 +208,10 @@ public class ServidorSocket extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton closeServerButton;
     private javax.swing.JLabel connection;
     private javax.swing.JLabel ipClient;
     private javax.swing.JLabel ipServer;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -191,6 +219,7 @@ public class ServidorSocket extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private static javax.swing.JLabel portaServer;
+    private javax.swing.JButton startServerButton;
     // End of variables declaration//GEN-END:variables
 
     private String toString(int portaServidor) {
