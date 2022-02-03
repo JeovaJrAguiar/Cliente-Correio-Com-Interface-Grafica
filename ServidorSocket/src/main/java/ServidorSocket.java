@@ -81,7 +81,7 @@ public class ServidorSocket extends javax.swing.JFrame {
                     getAdderssOfClient(cliente);
                     getAdderssOfServer(servidor);
 
-                    Scanner entrada = new Scanner(cliente.getInputStream());
+                    Email entrada = new Email(cliente.getInputStream());
                     if(entrada.toString() != "R3D3$"){
                         while(entrada.hasNextLine()){
                             System.out.println(entrada.nextLine());
