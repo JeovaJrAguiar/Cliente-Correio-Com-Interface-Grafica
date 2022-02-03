@@ -81,13 +81,18 @@ public class ServidorSocket extends javax.swing.JFrame {
                     getAdderssOfClient(cliente);
                     getAdderssOfServer(servidor);
 
+//                    String emailRem = emialRemetente.getText();
+//                    String emailDest = emailDestinatario.getText();
+//                    String assuntoEmail = assunto.getText();
+//                    String conteudoEmail = mensagem.getText();
+                    System.out.println("mensagem test ");
+
                     Email entrada = new Email(cliente.getInputStream());
-                    if(entrada.toString() != "R3D3$"){
-                        while(entrada.hasNextLine()){
-                            System.out.println(entrada.nextLine());
-                        }
-                    }else{
-                        closeSocket(cliente);
+                    if(entrada !=  null){
+                        System.out.println("Remetente: " +entrada.getRemetente());
+                        System.out.println("Destinatario: " +entrada.getDestinatario());
+                        System.out.println("Assunto: " +entrada.getAssunto());
+                        System.out.println("Mensagem: " +entrada.getMensagem());
                     }
             } catch (IOException ex) {
                 System.out.println("Erro ao criar cliente.");
