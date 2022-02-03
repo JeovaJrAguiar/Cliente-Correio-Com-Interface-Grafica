@@ -11,10 +11,6 @@ import java.util.logging.Logger;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-/**
- *
- * @author JEOVÁ JR
- */
 public class ServidorSocket extends javax.swing.JFrame {
     
     private static ServerSocket servidor = null;
@@ -97,10 +93,8 @@ public class ServidorSocket extends javax.swing.JFrame {
             } catch (IOException ex) {
                 System.out.println("Erro ao criar cliente.");
                 //Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
+            }       
             }
-                    
-            }
-        
     }
     
     private static void closeServer(){
