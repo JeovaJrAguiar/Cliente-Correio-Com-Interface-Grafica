@@ -61,9 +61,9 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().add(resultado, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 380, 140, 20));
 
         jLabel1.setText("CLIENT");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, -1, -1));
 
-        jLabel2.setText("Cliente Correio v1.0.4");
+        jLabel2.setText("Cliente Correio v3.5.1");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
         jLabel3.setText("Status:");
@@ -146,7 +146,7 @@ public class Principal extends javax.swing.JFrame {
     
     private static void iniciaCliente(){
         try {
-            cliente = new Socket("localhost", 3356);
+            cliente = new Socket("localhost", 3367);
             System.out.println("cliente conectado");
         } catch (IOException ex) {
             System.out.println("Erro na concexao com o servidor");
